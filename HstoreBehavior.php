@@ -10,7 +10,7 @@ namespace vaseninm\behaviors;
 use yii\base\InvalidCallException;
 use yii\behaviors\AttributeBehavior;
 use yii\db\BaseActiveRecord;
-use yii\db\Expression;
+
 
 class HstoreBehavior extends AttributeBehavior
 {
