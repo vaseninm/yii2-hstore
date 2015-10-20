@@ -14,7 +14,7 @@ use yii\db\BaseActiveRecord;
 
 class HstoreBehavior extends AttributeBehavior
 {
-    public $list = [];
+    public $attribute = [];
 
 
     /**
@@ -26,8 +26,8 @@ class HstoreBehavior extends AttributeBehavior
 
         if (empty($this->attributes)) {
             $this->attributes = [
-                BaseActiveRecord::EVENT_AFTER_VALIDATE => $this->list,
-                BaseActiveRecord::EVENT_AFTER_FIND => $this->list,
+                BaseActiveRecord::EVENT_AFTER_VALIDATE => [$this->attribute],
+                BaseActiveRecord::EVENT_AFTER_FIND => [$this->attribute],
             ];
         }
     }
@@ -39,9 +39,9 @@ class HstoreBehavior extends AttributeBehavior
     {
         switch ($event->name) {
             case BaseActiveRecord::EVENT_AFTER_VALIDATE:
-                return $this->hstoreEncode($this->value);
+                return $this->hstoreEncode($this->owner->{$this->attribute});
             case BaseActiveRecord::EVENT_AFTER_FIND:
-                return $this->hstoreDecode($this->value);
+                return $this->hstoreDecode($this->owner->{$this->attribute});
             default:
                 throw new InvalidCallException('Invalid get value call');
         }
