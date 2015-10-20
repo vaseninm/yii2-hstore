@@ -119,30 +119,23 @@ class HstoreValidator extends Validator
 
             $model->$attribute = $filteredValue;
         } else {
-            $this->getValidator($model); // ensure model context while validator creation
-            parent::validateAttribute($model, $attribute);
+            foreach ($this->key as $key) {
+                $result = $this->getValidator($model)->validateValue($model->{$attribute}[$key]);
+
+                if (!empty($result)) {
+                    $this->addError($model, [$attribute, $key], $result[0], $result[1]);
+                }
+            }
+
+
         }
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function validateValue($value)
+    public function addError($model, $attribute, $message, $params = [])
     {
-        if (!is_array($value)) {
-            return [$this->message, []];
-        }
-
-        $validator = $this->getValidator();
-
-        foreach ($this->key as $key) {
-            $result = $validator->validateValue($value[$key]);
-
-            if ($result !== null) {
-                return $this->allowMessageFromRule ? $result : [$this->message, []];
-            }
-        }
-
-        return null;
+        $value = $model->{$attribute[0]}[$attribute[1]];
+        $params['attribute'] = $model->getAttributeLabel($attribute[0]);
+        $params['value'] = is_array($value) ? 'array()' : $value;
+        $model->addError($attribute[0] . "[{$attribute[1]}]", \Yii::$app->getI18n()->format($message, $params, \Yii::$app->language));
     }
 }
