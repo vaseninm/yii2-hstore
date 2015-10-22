@@ -6,7 +6,7 @@
  * Time: 17:44
  */
 
-namespace vaseninm\behaviors;
+namespace vaseninm\validators;
 
 
 use yii\base\Model;

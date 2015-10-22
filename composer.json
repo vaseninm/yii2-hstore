@@ -15,6 +15,7 @@
   "autoload": {
     "psr-4": {
       "vaseninm\\behaviors\\": ""
+      "vaseninm\\validators\\": ""
     }
   }
 }
